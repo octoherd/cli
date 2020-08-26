@@ -37,7 +37,7 @@ module.exports = async function myScript(octokit, repository, options) {
 ## Example
 
 ```
-$ npx mutate-github-repositories \
+$ npx mutate-github-repositories-cli \
   --token 0123456789012345678901234567890123456789 \
   example.js \
   octokit/*
