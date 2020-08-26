@@ -1,0 +1,48 @@
+{
+  "name": "mutate-github-repositories-cli",
+  "version": "1.0.0",
+  "description": "CLI to find github releases in a repository or organization after a specified date",
+  "main": "index.js",
+  "bin": {
+    "mutate-github-repositories": "bin/mutate-github-repositories.js"
+  },
+  "dependencies": {
+    "@octokit/core": "^3.1.2",
+    "@octokit/plugin-paginate-rest": "^2.3.1",
+    "@octokit/plugin-retry": "^3.0.3",
+    "@octokit/plugin-throttling": "^3.3.0",
+    "jsonfile": "^6.0.1",
+    "mkdirp": "^1.0.4",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "semantic-release": "^17.1.1"
+  },
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "github",
+    "cli",
+    "maintenance"
+  ],
+  "author": "Gregor Martynus (https://twitter.com/gr2m)",
+  "license": "MIT",
+  "repository": "https://github.com/gr2m/mutate-github-repositories-cli",
+  "release": {
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "main",
+      "next",
+      "next-major",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
+    ]
+  }
+}

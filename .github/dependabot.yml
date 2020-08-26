@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  # https://docs.github.com/en/github/administering-a-repository/keeping-your-actions-up-to-date-with-github-dependabot
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
