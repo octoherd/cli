@@ -50,6 +50,11 @@ See [example.js](example.js) for the syntax of a script.
 - [gr2m/create-issue-to-add-octokit-core-as-peer-dependency-to-octokit-plugins](https://github.com/gr2m/create-issue-to-add-octokit-core-as-peer-dependency-to-octokit-plugins/tree/main) - create an issue in all Octokit plugin repositories
 - add yours! Please create a pull request ✨
 
+## Similar projects
+
+- [NerdWalletOSS/shepherd](https://github.com/NerdWalletOSS/shepherd) - A utility for applying code changes across many repositories. 
+- [FormidableLabs/multibot](https://github.com/FormidableLabs/multibot) - A friendly multi-repository robot
+
 ## License
 
 [ISC](LICENSE.md)
