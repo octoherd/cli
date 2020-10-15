@@ -2,7 +2,7 @@
 
 const yargs = require("yargs");
 
-const findGitHubReleases = require("..");
+const mutateGithubRepositories = require("..");
 
 var argv = yargs
   .usage("Usage: $0 [options] [script] [repos...]")
@@ -34,4 +34,4 @@ var argv = yargs
   .epilog("copyright 2020").argv;
 
 const { _, $0, ...options } = argv;
-findGitHubReleases(options).catch(console.error);
+mutateGithubRepositories(options).catch(console.error);
