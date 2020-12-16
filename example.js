@@ -1,4 +1,4 @@
-module.exports = exampleScript;
+module.exports.script = exampleScript;
 
 /**
  * Example script that stars or unstars the passed repository based on the `--unstar` CLI option

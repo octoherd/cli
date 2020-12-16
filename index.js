@@ -1,4 +1,4 @@
-module.exports = mutateGithubRepositories;
+module.exports = octoherd;
 
 const { resolve } = require("path");
 
@@ -33,7 +33,7 @@ const Octokit = OctokitCore.plugin(paginateRest, throttling, retry).defaults({
  * @param {string} options.repos Array of repository names in the form of "repo-owner/repo-name". To match all repositories for an owner, pass "repo-owner/*"
  * @param {boolean} options.cache Cache responses for debugging
  */
-async function mutateGithubRepositories(
+async function octoherd(
   options = {
     cache: false,
     repos: [],
@@ -46,16 +46,19 @@ async function mutateGithubRepositories(
   });
 
   let userScript;
+  const path = resolve(process.cwd(), script);
   try {
-    userScript = require(resolve(process.cwd(), script));
+    userScript = require(path).script;
   } catch (error) {
-    throw new Error(
-      `[mutate-github-repositories] ${script} script could not be found`
-    );
+    throw new Error(`[octoherd] ${script} script could not be found`);
+  }
+
+  if (!userScript) {
+    throw new Error(`[octoherd] no "script" exported at ${path}`);
   }
 
   if (repos.length === 0) {
-    throw new Error("[mutate-github-repositories] No repositories provided");
+    throw new Error("[octoherd] No repositories provided");
   }
 
   state = {
