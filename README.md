@@ -34,22 +34,9 @@ module.exports.script = async function myScript(octokit, repository, options) {
 - `repository` is the response data of [`GET /repos/{owner}/{repo}`](https://developer.github.com/v3/repos/#get-a-repository)
 - `options` are all options passed to the CLI which are not used by `octoherd`.
 
-## Example
+## Examples
 
-```
-$ npx @octoherd/cli \
-  --token 0123456789012345678901234567890123456789 \
-  example.js \
-  octokit/*
-```
-
-See [example.js](example.js) for the syntax of a script.
-
-## Community usage
-
-- [gr2m/create-issue-to-add-octokit-core-as-peer-dependency-to-octokit-plugins](https://github.com/gr2m/create-issue-to-add-octokit-core-as-peer-dependency-to-octokit-plugins/#readme) - create an issue in all Octokit plugin repositories
-- [gr2m/add-coc](https://github.com/gr2m/add-coc/#readme) - create a `CODE_OF_CONDUCT.md` file unless already present
-- add yours! Please create a pull request ✨
+See https://github.com/octoherd/scripts
 
 ## Similar projects
 
