@@ -2,7 +2,7 @@
 
 const yargs = require("yargs");
 
-const mutateGithubRepositories = require("..");
+const octoherd = require("..");
 
 var argv = yargs
   .usage("Usage: $0 [options] [script] [repos...]")
@@ -34,4 +34,4 @@ var argv = yargs
   .epilog("copyright 2020").argv;
 
 const { _, $0, ...options } = argv;
-mutateGithubRepositories(options).catch(console.error);
+octoherd(options).catch(console.error);

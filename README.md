@@ -1,11 +1,11 @@
-# mutate-github-repositories-cli
+# Octoherd CLI
 
 > CLI to run a custom script on one or multiple repositories
 
 ## Usage
 
 ```
-$ mutate-github-repositories [script] [repos...]
+$ octoherd [script] [repos...]
 
 Positionals:
   script  Path to your *.js script
@@ -20,24 +20,22 @@ Options:
   --cache    Cache responses for debugging            [boolean] [default: false]
 ```
 
-The `script` must export a default function which takes three parameters:
+The `script` must export a `script` function which takes three parameters:
 
 ```js
-module.exports = exampleScript;
-
-module.exports = async function myScript(octokit, repository, options) {
+module.exports.script = async function myScript(octokit, repository, options) {
   // do something here
 };
 ```
 
 - `octokit` is an instance of [`@octokit/core`](https://github.com/octokit/core.js) with the [`@octokit/plugin-paginate-rest` plugin](https://github.com/octokit/plugin-paginate-rest.js)
 - `repository` is the response data of [`GET /repos/{owner}/{repo}`](https://developer.github.com/v3/repos/#get-a-repository)
-- `options` are all options passed to the CLI which are not used by `mutate-github-repositories`.
+- `options` are all options passed to the CLI which are not used by `octoherd`.
 
 ## Example
 
 ```
-$ npx mutate-github-repositories-cli \
+$ npx @octoherd/cli \
   --token 0123456789012345678901234567890123456789 \
   example.js \
   octokit/*
@@ -53,7 +51,7 @@ See [example.js](example.js) for the syntax of a script.
 
 ## Similar projects
 
-- [NerdWalletOSS/shepherd](https://github.com/NerdWalletOSS/shepherd) - A utility for applying code changes across many repositories. 
+- [NerdWalletOSS/shepherd](https://github.com/NerdWalletOSS/shepherd) - A utility for applying code changes across many repositories.
 - [FormidableLabs/multibot](https://github.com/FormidableLabs/multibot) - A friendly multi-repository robot
 
 ## License
