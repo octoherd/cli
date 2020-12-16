@@ -1,1 +1,4 @@
-
+_extends: .github
+repository:
+  name: cli
+  description: CLI to run a octoherd scripts on one or multiple repositories
