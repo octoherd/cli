@@ -2,6 +2,8 @@
 
 > CLI to run a custom script on one or multiple repositories
 
+<a href="https://myoctocat.dev/@gr2m/octoherd/"><img alt="Octoherd Avatar" src="assets/octoherd.gif" width=300 height=300 align=left></a>
+
 ## Usage
 
 ```
