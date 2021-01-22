@@ -6,19 +6,26 @@ const { Octokit: OctokitCore } = require("@octokit/core");
 const { paginateRest } = require("@octokit/plugin-paginate-rest");
 const { throttling } = require("@octokit/plugin-throttling");
 const { retry } = require("@octokit/plugin-retry");
+const pino = require("pino");
 
 const { cache: octokitCachePlugin } = require("./lib/octokit-plugin-cache");
 const { resolveRepositories } = require("./lib/resolve-repositories");
 const { name, version } = require("./package.json");
 
+const logger = pino();
 const Octokit = OctokitCore.plugin(paginateRest, throttling, retry).defaults({
-  log: console,
+  log: {
+    debug: logger.debug.bind(logger),
+    info: logger.info.bind(logger),
+    warn: logger.warn.bind(logger),
+    error: logger.error.bind(logger),
+  },
   userAgent: [name, version].join("/"),
   throttle: {
-    onAbuseLimit: (error, options) => {
+    onAbuseLimit: (error, options, octokit) => {
       octokit.log.error("onAbuseLimit", error, options);
     },
-    onRateLimit: (error, options) => {
+    onRateLimit: (error, options, octokit) => {
       octokit.log.error("onRateLimit", error, options);
     },
   },
@@ -69,9 +76,9 @@ async function octoherd(
   const repositories = await resolveRepositories(state, repos);
 
   for (const repository of repositories) {
-    console.log("Running %s on %s...", script, repository.full_name);
+    octokit.log.info("Running %s on %s...", script, repository.full_name);
     await userScript(octokit, repository, userOptions);
   }
 
-  console.log("\ndone.");
+  octokit.log.info("done");
 }

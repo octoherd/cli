@@ -16,6 +16,7 @@
     "@octokit/plugin-throttling": "^3.3.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
+    "pino": "^6.10.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
