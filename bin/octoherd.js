@@ -32,6 +32,11 @@ const argv = yargs
     type: "boolean",
     default: false,
   })
+  .option("octoherd-debug", {
+    description: "Show debug logs",
+    type: "boolean",
+    default: false,
+  })
   .epilog("copyright 2020").argv;
 
 const { _, $0, script, repos, ...options } = argv;
