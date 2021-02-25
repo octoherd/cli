@@ -10,7 +10,7 @@
 $ octoherd.js [script] [repos...]
 
 Positionals:
-  script  Path to your *.js script
+  script  Path to *.js script. Must be an ES Module.
   repos   One or multiple arrays in the form of 'repo-owner/repo-name'.
           'repo-owner/*' will find all repositories for one owner. '*' will find
           all repositories the user has access to                  [default: []]
@@ -21,6 +21,7 @@ Options:
   --octoherd-token  Requires the "public_repo" scope for public repositories,
                     "repo" scope for private repositories.   [string] [required]
   --octoherd-cache  Cache responses for debugging     [boolean] [default: false]
+  --octoherd-debug  Show debug logs                   [boolean] [default: false]
 ```
 
 The `script` must export a `script` function which takes three parameters:

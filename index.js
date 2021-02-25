@@ -33,8 +33,9 @@ export async function octoherd(
 ) {
   const {
     octoherdToken,
-    octoherdScript,
     octoherdCache,
+    octoherdDebug,
+    octoherdScript,
     octoherdRepos,
     ...userOptions
   } = options;
@@ -47,7 +48,7 @@ export async function octoherd(
     auth: octoherdToken,
     userAgent: ["octoherd-cli", VERSION].join("/"),
     octoherd: {
-      debug: true,
+      debug: octoherdDebug,
       onLogMessage(level, message, additionalData) {
         console.log(
           levelColor[level](" " + level.toUpperCase() + " "),
