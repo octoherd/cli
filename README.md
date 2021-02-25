@@ -27,12 +27,12 @@ Options:
 The `script` must export a `script` function which takes three parameters:
 
 ```js
-module.exports.script = async function myScript(octokit, repository, options) {
+export async function script(octokit, repository, options) {
   // do something here
-};
+}
 ```
 
-- `octokit` is an instance of [`@octokit/core`](https://github.com/octokit/core.js) with the [`@octokit/plugin-paginate-rest` plugin](https://github.com/octokit/plugin-paginate-rest.js)
+- `octokit` is an instance of [`@octoherd/octokit`](https://github.com/octoherd/octokit.js)
 - `repository` is the response data of [`GET /repos/{owner}/{repo}`](https://developer.github.com/v3/repos/#get-a-repository)
 - `options` are all options passed to the CLI which are not used by `octoherd`.
 
