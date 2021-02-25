@@ -56,11 +56,6 @@ export async function octoherd(
     auth: token,
   });
 
-  octokit.log.debug({ check: 12 }, "debug");
-  octokit.log.info({ check: 12 }, "info");
-  octokit.log.warn({ check: 12 }, "warn");
-  octokit.log.error({ check: 12 }, "error");
-
   let userScript;
   const path = resolve(process.cwd(), script);
 
