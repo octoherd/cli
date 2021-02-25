@@ -6,7 +6,7 @@
   "type": "module",
   "version": "0.0.0-development",
   "description": "CLI to run a custom script on one or multiple repositories",
-  "main": "index.js",
+  "exports": "./index.js",
   "bin": {
     "octoherd": "bin/octoherd.js"
   },
@@ -15,6 +15,7 @@
     "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
+    "tempy": "^1.0.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
