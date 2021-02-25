@@ -7,19 +7,20 @@
 ## Usage
 
 ```
-$ octoherd [script] [repos...]
+$ octoherd.js [script] [repos...]
 
 Positionals:
   script  Path to your *.js script
-  repos   One or multiple arrays in the form of 'repo-owner/repo-name'
-                                                                   [default: []]
+  repos   One or multiple arrays in the form of 'repo-owner/repo-name'.
+          'repo-owner/*' will find all repositories for one owner. '*' will find
+          all repositories the user has access to                  [default: []]
 
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
-  --token    Requires the "public_repo" scope for public repositories, "repo"
-             scope for private repositories.                 [string] [required]
-  --cache    Cache responses for debugging            [boolean] [default: false]
+  --help            Show help                                          [boolean]
+  --version         Show version number                                [boolean]
+  --octoherd-token  Requires the "public_repo" scope for public repositories,
+                    "repo" scope for private repositories.   [string] [required]
+  --octoherd-cache  Cache responses for debugging     [boolean] [default: false]
 ```
 
 The `script` must export a `script` function which takes three parameters:

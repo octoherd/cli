@@ -3,24 +3,24 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "version": "0.0.0-development",
   "description": "CLI to run a custom script on one or multiple repositories",
-  "main": "index.js",
+  "exports": "./index.js",
   "bin": {
     "octoherd": "bin/octoherd.js"
   },
   "dependencies": {
-    "@octokit/core": "^3.1.2",
-    "@octokit/plugin-paginate-rest": "^2.3.1",
-    "@octokit/plugin-retry": "^3.0.3",
-    "@octokit/plugin-throttling": "^3.3.0",
+    "@octoherd/octokit": "^2.0.0",
+    "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
-    "pino": "^6.10.0",
+    "tempy": "^1.0.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "semantic-release": "^17.1.1"
+    "semantic-release": "^17.1.1",
+    "semantic-release-plugin-update-version-in-files": "^1.1.0"
   },
   "scripts": {
     "test": "node index.js"
@@ -36,6 +36,20 @@
   "release": {
     "branches": [
       "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      "@semantic-release/npm",
+      [
+        "semantic-release-plugin-update-version-in-files",
+        {
+          "files": [
+            "version.js"
+          ]
+        }
+      ]
     ]
   }
 }
