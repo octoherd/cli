@@ -6,7 +6,7 @@
   "type": "module",
   "version": "0.0.0-development",
   "description": "CLI to run a custom script on one or multiple repositories",
-  "exports": "./index.js",
+  "exports": "./bin/octoherd.js",
   "bin": {
     "octoherd": "bin/octoherd.js"
   },
