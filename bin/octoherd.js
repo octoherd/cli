@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const yargs = require("yargs");
+import yargs from "yargs";
 
-const octoherd = require("..");
+import { octoherd } from "../index.js";
 
-var argv = yargs
+const argv = yargs
   .usage("Usage: $0 [options] [script] [repos...]")
   .example(
     "$0 --token 0123456789012345678901234567890123456789 octokit/rest.js"
@@ -34,4 +34,7 @@ var argv = yargs
   .epilog("copyright 2020").argv;
 
 const { _, $0, ...options } = argv;
-octoherd(options).catch(console.error);
+octoherd(options).catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
