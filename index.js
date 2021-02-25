@@ -58,13 +58,15 @@ export async function octoherd(
         );
       },
       onLogData(data) {
-        appendFileSync(tmpLogFile, JSON.stringify(data));
+        appendFileSync(tmpLogFile, JSON.stringify(data) + "\n");
       },
     },
   });
 
   let userScript;
   const path = resolve(process.cwd(), octoherdScript);
+
+  octokit.log.info("Loading script at %s", octoherdScript);
 
   try {
     userScript = (await import(path)).script;
@@ -86,6 +88,7 @@ export async function octoherd(
   };
 
   try {
+    octokit.log.info("Loading repositories ...");
     const repositories = await resolveRepositories(state, octoherdRepos);
 
     for (const repository of repositories) {
