@@ -6,6 +6,8 @@ import chalk from "chalk";
 import tempy from "tempy";
 
 import { cache as octokitCachePlugin } from "./lib/octokit-plugin-cache.js";
+import { requestLog } from "./lib/octokit-plugin-request-log.js";
+import { requestConfirm } from "./lib/octokit-plugin-request-confirm.js";
 import { resolveRepositories } from "./lib/resolve-repositories.js";
 import { VERSION } from "./version.js";
 
@@ -37,23 +39,36 @@ export async function octoherd(
     octoherdDebug,
     octoherdScript,
     octoherdRepos,
+    octoherdBypassConfirms,
     ...userOptions
   } = options;
+
   const tmpLogFile = tempy.file({ extension: "ndjson.log" });
 
-  const CliOctokit = octoherdCache
-    ? Octokit.plugin(octokitCachePlugin)
-    : Octokit;
+  const plugins = [requestLog, requestConfirm];
+  if (typeof octoherdCache === "string") plugins.push(octokitCachePlugin);
+  const CliOctokit = Octokit.plugin(...plugins);
+
   const octokit = new CliOctokit({
     auth: octoherdToken,
     userAgent: ["octoherd-cli", VERSION].join("/"),
     octoherd: {
       debug: octoherdDebug,
+      cache: octoherdCache,
+      bypassConfirms: octoherdBypassConfirms,
       onLogMessage(level, message, additionalData) {
+        // ignore the `octoherd` property in meta data
+        const { octoherd, ...meta } = additionalData;
+        let additionalDataString = JSON.stringify(meta);
+
+        if (additionalDataString.length > 300) {
+          additionalDataString = additionalDataString.slice(0, 295) + " … }";
+        }
+
         console.log(
           levelColor[level](" " + level.toUpperCase() + " "),
-          Object.keys(additionalData).length
-            ? `${message} ${chalk.gray(JSON.stringify(additionalData))}`
+          Object.keys(meta).length
+            ? `${message} ${chalk.gray(additionalDataString)}`
             : message
         );
       },
@@ -78,7 +93,7 @@ export async function octoherd(
     throw new Error(`[octoherd] no "script" exported at ${path}`);
   }
 
-  if (octoherdCache.length === 0) {
+  if (octoherdRepos.length === 0) {
     throw new Error("[octoherd] No repositories provided");
   }
 
@@ -93,22 +108,33 @@ export async function octoherd(
 
     for (const repository of repositories) {
       octokit.log.info(
+        { octoherd: true },
         "Running %s on %s...",
         octoherdScript,
         repository.full_name
       );
-      await userScript(octokit, repository, userOptions);
-    }
 
-    console.log("");
-    console.log(levelColor.info(" DONE "), `Log file written to ${tmpLogFile}`);
+      try {
+        await userScript(octokit, repository, userOptions);
+      } catch (error) {
+        if (!error.cancel) throw error;
+        octokit.log.debug(error.message);
+      }
+    }
   } catch (error) {
     octokit.log.error(error);
-    console.log("");
+    process.exitCode = 1;
+  }
+
+  console.log("");
+  console.log(chalk.gray("-".repeat(80)));
+  console.log("");
+  console.log(`Log file written to ${tmpLogFile}`);
+
+  if ("octoherdCache" in options) {
     console.log(
-      levelColor.error(" DONE "),
-      `Log file written to ${tmpLogFile}`
+      "Request cache written to %s",
+      options.octoherdCache || "./cache"
     );
-    process.exit(1);
   }
 }

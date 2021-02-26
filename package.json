@@ -11,10 +11,11 @@
     "octoherd": "bin/octoherd.js"
   },
   "dependencies": {
-    "@octoherd/octokit": "^2.0.0",
+    "@octoherd/octokit": "^2.3.0",
     "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
+    "prompt-confirm": "^2.0.4",
     "tempy": "^1.0.0",
     "yargs": "^15.4.1"
   },
