@@ -16,12 +16,17 @@ Positionals:
           all repositories the user has access to                  [default: []]
 
 Options:
-  --help            Show help                                          [boolean]
-  --version         Show version number                                [boolean]
-  --octoherd-token  Requires the "public_repo" scope for public repositories,
-                    "repo" scope for private repositories.   [string] [required]
-  --octoherd-cache  Cache responses for debugging     [boolean] [default: false]
-  --octoherd-debug  Show debug logs                   [boolean] [default: false]
+  --help                      Show help                                [boolean]
+  --version                   Show version number                      [boolean]
+  --octoherd-token            Requires the "public_repo" scope for public
+                              repositories, "repo" scope for private
+                              repositories.                  [string] [required]
+  --octoherd-cache            Cache responses for debugging. Creates a ./cache
+                              folder if flag is set. Override by passing custom
+                              path                                      [string]
+  --octoherd-debug            Show debug logs         [boolean] [default: false]
+  --octoherd-bypass-confirms  Bypass prompts to confirm mutating requests
+                                                      [boolean] [default: false]
 ```
 
 The `script` must export a `script` function which takes three parameters:

@@ -11,7 +11,7 @@
     "octoherd": "bin/octoherd.js"
   },
   "dependencies": {
-    "@octoherd/octokit": "^2.2.1",
+    "@octoherd/octokit": "^2.3.0",
     "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
