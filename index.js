@@ -86,6 +86,7 @@ export async function octoherd(
   try {
     userScript = (await import(path)).script;
   } catch (error) {
+    octokit.log.error(error.stack);
     throw new Error(`[octoherd] ${octoherdScript} script could not be found`);
   }
 
