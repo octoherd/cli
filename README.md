@@ -43,7 +43,7 @@ export async function script(octokit, repository, options) {
 
 ## Examples
 
-See https://github.com/octoherd/scripts
+- https://github.com/topics/octoherd-script
 
 ## Similar projects
 
