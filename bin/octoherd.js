@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
 import yargs from "yargs";
+import { resolve } from "path";
 import { VERSION as OctokitVersion } from "@octoherd/octokit";
 import chalk from "chalk";
 
 import { octoherd } from "../index.js";
 import { VERSION } from "../version.js";
+import { cliOptions } from "./cli-options.js";
 
 const argv = yargs
   .usage("Usage: $0 [options] [script] [repos...]")
@@ -24,35 +26,16 @@ const argv = yargs
       default: [],
     });
   })
-  .option("octoherd-token", {
-    description:
-      'Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.',
-    demandOption: true,
-    type: "string",
-  })
-  .option("octoherd-cache", {
-    description:
-      "Cache responses for debugging. Creates a ./cache folder if flag is set. Override by passing custom path",
-    type: "string",
-  })
-  .option("octoherd-debug", {
-    description: "Show debug logs",
-    type: "boolean",
-    default: false,
-  })
-  .option("octoherd-bypass-confirms", {
-    description: "Bypass prompts to confirm mutating requests",
-    type: "boolean",
-    default: false,
-  })
-  .epilog("copyright 2020").argv;
+  .options(cliOptions)
+  .version(VERSION)
+  .epilog(`copyright 2020-${new Date().getFullYear()}`).argv;
 
 const { _, $0, script, repos, ...options } = argv;
 
 console.log(
   `\n${chalk.bold("Running @octoherd/cli v%s")} ${chalk.gray(
     "(@octoherd/octokit v%s, Node.js: %s, %s %s)"
-  )}\n`,
+  )}`,
   VERSION,
   OctokitVersion,
   process.version,
@@ -60,7 +43,23 @@ console.log(
   process.arch
 );
 
-octoherd({ ...options, octoherdScript: script, octoherdRepos: repos }).catch(
+let octoherdScript;
+const path = resolve(process.cwd(), script);
+
+console.log("Loading script at %s\n", script);
+
+try {
+  octoherdScript = (await import(path)).script;
+} catch (error) {
+  console.error(error.stack);
+  throw new Error(`[octoherd] ${script} script could not be found`);
+}
+
+if (!octoherdScript) {
+  throw new Error(`[octoherd] no "script" exported at ${path}`);
+}
+
+octoherd({ ...options, octoherdScript, octoherdRepos: repos }).catch(
   (error) => {
     console.error(error);
     process.exit(1);
