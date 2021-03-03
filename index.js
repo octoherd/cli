@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { appendFileSync } from "fs";
 
 import { Octokit } from "@octoherd/octokit";
@@ -22,10 +21,10 @@ const levelColor = {
  * Find all releases in a GitHub repository or organization after a specified date
  *
  * @param {object} options
+ * @param {function} options.octoherdScript Path to script to run against a repository
+ * @param {string[]} options.octoherdRepos Cache responses for debugging
  * @param {string} options.octoherdToken Personal Access Token: Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.
- * @param {string} options.octoherdScript Path to script to run against a repository
- * @param {string} options.octoherdCache Array of repository names in the form of "repo-owner/repo-name". To match all repositories for an owner, pass "repo-owner/*"
- * @param {boolean} options.octoherdRepos Cache responses for debugging
+ * @param {boolean} options.octoherdCache Array of repository names in the form of "repo-owner/repo-name". To match all repositories for an owner, pass "repo-owner/*"
  */
 export async function octoherd(
   options = {
@@ -78,22 +77,6 @@ export async function octoherd(
     },
   });
 
-  let userScript;
-  const path = resolve(process.cwd(), octoherdScript);
-
-  octokit.log.info("Loading script at %s", octoherdScript);
-
-  try {
-    userScript = (await import(path)).script;
-  } catch (error) {
-    octokit.log.error(error.stack);
-    throw new Error(`[octoherd] ${octoherdScript} script could not be found`);
-  }
-
-  if (!userScript) {
-    throw new Error(`[octoherd] no "script" exported at ${path}`);
-  }
-
   if (octoherdRepos.length === 0) {
     throw new Error("[octoherd] No repositories provided");
   }
@@ -110,13 +93,12 @@ export async function octoherd(
     for (const repository of repositories) {
       octokit.log.info(
         { octoherd: true },
-        "Running %s on %s...",
-        octoherdScript,
+        "Running on %s ...",
         repository.full_name
       );
 
       try {
-        await userScript(octokit, repository, userOptions);
+        await octoherdScript(octokit, repository, userOptions);
       } catch (error) {
         if (!error.cancel) throw error;
         octokit.log.debug(error.message);

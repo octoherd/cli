@@ -6,12 +6,17 @@
   "type": "module",
   "version": "0.0.0-development",
   "description": "CLI to run a custom script on one or multiple repositories",
-  "exports": "./bin/octoherd.js",
+  "exports": {
+    ".": "./index.js",
+    "./run": "./bin/run.js"
+  },
   "bin": {
     "octoherd": "bin/octoherd.js"
   },
+  "types": "inddex.d.ts",
   "dependencies": {
     "@octoherd/octokit": "^2.3.0",
+    "@octokit/openapi-types": "^5.2.2",
     "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
@@ -28,11 +33,12 @@
   },
   "keywords": [
     "github",
-    "cli",
-    "maintenance"
+    "repository",
+    "maintenance",
+    "cli"
   ],
   "author": "Gregor Martynus (https://twitter.com/gr2m)",
-  "license": "MIT",
+  "license": "ISC",
   "repository": "https://github.com/octoherd/cli",
   "release": {
     "branches": [
