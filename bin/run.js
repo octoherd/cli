@@ -53,5 +53,3 @@ export function run(script) {
     }
   );
 }
-
-import { script } from "../../script-star-or-unstar/script.js";
