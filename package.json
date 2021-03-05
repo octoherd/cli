@@ -39,7 +39,7 @@
   ],
   "author": "Gregor Martynus (https://twitter.com/gr2m)",
   "license": "ISC",
-  "repository": "https://github.com/octoherd/cli",
+  "repository": "github:octoherd/cli",
   "release": {
     "branches": [
       "main"
