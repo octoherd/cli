@@ -1,193 +1,188 @@
-import { resolveRepositories } from '../../lib/resolve-repositories';
+import { resolveRepositories } from '../../lib/resolve-repositories.js';
 import { Octokit } from "@octoherd/octokit";
 import nock from "nock";
-import responseRepoFromOrg from "../fixtures/org/get-repo-response.json";
-import responseRepoFromUser from "../fixtures/user/get-repo-response.json";
+import { suite } from "uvu";
+import { equal } from "uvu/assert";
 
-nock.disableNetConnect()
+const resolveRepos = suite('resolve-repositories')
+const withOrg = suite('when GitHub account is an Organization: "@octoherd"')
+const withUser = suite('when GitHub account is a User: "@gr2m"')
 
-describe('resolve-repositories', () => {
-	afterEach(() => {
-		nock.cleanAll()
-	})
+withOrg('when single repository exists', async () => {
+	const org = 'octoherd';
+	const repo = 'cli';
+	const octokit = new Octokit({
+		auth: 'randomToken',
+	});
+	
+	const repositories = [
+		`${org}/${repo}`
+	]
 
-	describe('when GitHub account is an Organization: octoherd', () => {
-		test('when single repository exists', async () => {
-			const org = 'octoherd';
-			const repo = 'cli';
-			const octokit = new Octokit({
-				auth: 'randomToken',
-			});
-			
-			const repositories = [
-				`${org}/${repo}`
-			]
-			
-			nock('https://api.github.com')
-				.head(`/org/:org`)
-				.reply(200)
+	const mockedResponse = { name: repo }
+	
+	nock('https://api.github.com')
+		.get(`/repos/${org}/${repo}`)
+		.reply(200, mockedResponse)
+	
+	const resolvedRepos = await resolveRepositories({
+		log: console,
+		octokit,
+	}, repositories)
 
-				.get(`/repos/${org}/${repo}`)
-				.reply(200, responseRepoFromOrg)
-			
-			
-			const resolvedRepos = await resolveRepositories({
-				log: console,
-				octokit,
-			}, repositories)
-
-			const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-			
-			expect(resolvedRepoNames).toEqual([repo])
-		})
-
-		test('when requesting all the repositories', async () => {
-			const org = 'octoherd';
-			const repo = '*';
-			const octokit = new Octokit({
-				auth: 'randomToken',
-			});
-			
-			const repositories = [
-				`${org}/${repo}`
-			]
-
-			nock('https://api.github.com')
-					.head(`/org/:org`)
-					.reply(200)
-
-					.get(`/orgs/${org}/repos`)
-					.reply(200, responseRepoFromOrg)
-			
-			const resolvedRepos = await resolveRepositories({
-				log: console,
-				octokit,
-			}, repositories)
-
-			const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-			
-			expect(resolvedRepos.length).toBeGreaterThanOrEqual(15)
-			expect(resolvedRepoNames).toEqual(...[
-				"cli",
-				"octoherd",
-				".github",
-				"octokit",
-				"script-close-renovate-dashboard-issues",
-				"script-create-repositories-from-script-folders",
-				"script-find-releases",
-				"script-remove-dependabot",
-				"script-remove-required-ci-check",
-				"script-setup-renovate",
-				"script-star-or-unstar",
-				"script-sync-branch-protections",
-				"script-add-octoherd-cli-to-script",
-				"script-hello-world",
-				"create-octoherd-script"
-			])
-		})
-
-	// 	test('when requesting all the repositories under a pattern', async () => {
-	// 		const owner = 'octoherd';
-	// 		const repo = 'script-*';
-	// 		const octokit = new Octokit({
-	// 			auth: process.env.GITHUB_TOKEN,
-	// 		});
-			
-	// 		const repositories = [
-	// 			`${owner}/${repo}`
-	// 		]
-			
-	// 		const resolvedRepos = await resolveRepositories({
-	// 			log: console,
-	// 			octokit,
-	// 		}, repositories)
-
-	// 		const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-			
-	// 		expect(resolvedRepos.length).toBeGreaterThanOrEqual(10)
-	// 		expect(resolvedRepoNames).toEqual(expect.arrayContaining([
-	// 			"script-close-renovate-dashboard-issues",
-	// 			"script-create-repositories-from-script-folders",
-	// 			"script-find-releases",
-	// 			"script-remove-dependabot",
-	// 			"script-remove-required-ci-check",
-	// 			"script-setup-renovate",
-	// 			"script-star-or-unstar",
-	// 			"script-sync-branch-protections",
-	// 			"script-add-octoherd-cli-to-script",
-	// 			"script-hello-world"
-	// 		]))
-	// 		expect(resolvedRepoNames).not.toContain("create-octoherd-script")
-	// 		expect(resolvedRepoNames).not.toContain("cli")
-	// 	})
-
-	// 	test('when requesting all the repositories under a pattern', async () => {
-	// 		const owner = 'octoherd';
-	// 		const repo = '*-script';
-	// 		const octokit = new Octokit({
-	// 			auth: process.env.GITHUB_TOKEN,
-	// 		});
-			
-	// 		const repositories = [
-	// 			`${owner}/${repo}`
-	// 		]
-			
-	// 		const resolvedRepos = await resolveRepositories({
-	// 			log: console,
-	// 			octokit,
-	// 		}, repositories)
-
-	// 		const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-
-	// 		expect(resolvedRepos.length).toBeGreaterThanOrEqual(1)
-	// 		expect(resolvedRepoNames).toEqual(["create-octoherd-script"])
-	// 		expect(resolvedRepoNames).not.toContain("script-hello-world")
-	// 		expect(resolvedRepoNames).not.toContain("cli")
-	// 	})
-	// })
-
-	// describe('when GitHub account is a User: gr2m', () => {
-	// 	test('when single repository exists', async () => {
-	// 		const owner = 'gr2m';
-	// 		const repo = 'squash-commit-app';
-	// 		const octokit = new Octokit({
-	// 			auth: process.env.GITHUB_TOKEN,
-	// 		});
-
-	// 		const repositories = [
-	// 			`${owner}/${repo}`
-	// 		]
-
-	// 		const resolvedRepos = await resolveRepositories({
-	// 			log: console,
-	// 			octokit,
-	// 		}, repositories)
-			
-	// 		const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-			
-	// 		expect(resolvedRepoNames).toEqual([repo])
-	// 	})
-
-	// 	test('when requesting all the repositories', async () => {
-	// 		const owner = 'octokitbot';
-	// 		const repo = '*';
-	// 		const octokit = new Octokit({
-	// 			auth: process.env.GITHUB_TOKEN,
-	// 		});
-			
-	// 		const repositories = [
-	// 			`${owner}/${repo}`
-	// 		]
-			
-	// 		const resolvedRepos = await resolveRepositories({
-	// 			log: console,
-	// 			octokit,
-	// 		}, repositories)
-
-	// 		const resolvedRepoNames = resolvedRepos.map(repo => repo.name)
-			
-	// 		expect(resolvedRepos.length).toBeGreaterThanOrEqual(1)
-	// 		expect(resolvedRepoNames).toContain("sandbox")
-	// 	})
-	})
+	equal(resolvedRepos, [mockedResponse])
 })
+
+withOrg('when requesting all the repositories', async () => {
+	const org = 'octoherd';
+	const repo = '*';
+	const octokit = new Octokit({ auth: 'randomToken' });
+	
+	const repositories = [`${org}/${repo}`]
+
+	const mockedResponse = [
+		{ name: "cli" },
+		{ name: "octoherd" },
+		{ name: ".github" },
+		{ name: "octokit" },
+		{ name: "script-close-renovate-dashboard-issues" },
+		{ name: "script-create-repositories-from-script-folders" },
+		{ name: "script-find-releases" },
+		{ name: "script-remove-dependabot" },
+		{ name: "script-remove-required-ci-check" },
+		{ name: "script-setup-renovate" },
+		{ name: "script-star-or-unstar" },
+		{ name: "script-sync-branch-protections" },
+		{ name: "script-add-octoherd-cli-to-script" },
+		{ name: "script-hello-world" },
+		{ name: "create-octoherd-script }" }
+	]
+
+	nock('https://api.github.com')
+		.head(`/orgs/${org}`)
+		.reply(200)
+		.get(`/orgs/${org}/repos`)
+		.query({ per_page: 100 })
+		.reply(200, mockedResponse)
+	
+	const resolvedRepos = await resolveRepositories({
+		log: console,
+		octokit,
+	}, repositories)
+
+	equal(resolvedRepos, mockedResponse)
+})
+
+withOrg('when requesting all the repositories under a pattern', async () => {
+	const org = 'octoherd';
+	const repo = 'script-*';
+	const octokit = new Octokit({
+		auth: process.env.GITHUB_TOKEN,
+	});
+	
+	const repositories = [
+		`${org}/${repo}`
+	]
+
+	const scriptRepos = [
+		{ name: "script-close-renovate-dashboard-issues" },
+		{ name: "script-create-repositories-from-script-folders" },
+		{ name: "script-find-releases" },
+		{ name: "script-remove-dependabot" },
+		{ name: "script-remove-required-ci-check" },
+		{ name: "script-setup-renovate" },
+		{ name: "script-star-or-unstar" },
+		{ name: "script-sync-branch-protections" },
+		{ name: "script-add-octoherd-cli-to-script" },
+		{ name: "script-hello-world" }
+	]
+
+	const nonScriptRepos = [
+		{ name: "cli" },
+		{ name: "octoherd" },
+		{ name: ".github" },
+		{ name: "octokit" },
+		{ name: "create-octoherd-script }" }
+	]
+
+	nock('https://api.github.com')
+		.head(`/orgs/${org}`)
+		.reply(200)
+		.get(`/orgs/${org}/repos`)
+		.query({ per_page: 100 })
+		.reply(200, [...scriptRepos, ...nonScriptRepos])
+	
+	const resolvedRepos = await resolveRepositories({
+		log: console,
+		octokit,
+	}, repositories)
+
+	equal(resolvedRepos, scriptRepos)
+})
+
+withUser('when single repository exists', async () => {
+	const owner = 'gr2m';
+	const repo = 'squash-commit-app';
+	const octokit = new Octokit({
+		auth: process.env.GITHUB_TOKEN,
+	});
+
+	const repositories = [
+		`${owner}/${repo}`
+	]
+
+	const mockedResponse = { name: repo }
+
+	nock('https://api.github.com')
+		.get(`/repos/${owner}/${repo}`)
+		.reply(200, mockedResponse)
+
+	const resolvedRepos = await resolveRepositories({
+		log: console,
+		octokit,
+	}, repositories)
+	
+	equal(resolvedRepos, [mockedResponse])
+})
+
+withUser('when requesting all the repositories', async () => {
+	const owner = 'octokitbot';
+	const repo = '*';
+	const octokit = new Octokit({
+		auth: process.env.GITHUB_TOKEN,
+	});
+	
+	const repositories = [
+		`${owner}/${repo}`
+	]
+
+	const mockedResponse = [
+		{ name: "repo1" },
+		{ name: "repo2" }
+	]
+
+	nock('https://api.github.com')
+		.head(`/orgs/${owner}`)
+		.reply(404)
+		.get(`/users/${owner}/repos`)
+		.query({ per_page: 100 })
+		.reply(200, mockedResponse)
+	
+	const resolvedRepos = await resolveRepositories({
+		log: console,
+		octokit,
+	}, repositories)
+
+	equal(resolvedRepos, mockedResponse)
+})
+
+resolveRepos('resolve-repositories', () => {
+	withOrg.run()
+	withUser.run()
+})
+
+resolveRepos.after.each(() => {
+	nock.cleanAll()
+})
+
+resolveRepos.run()
