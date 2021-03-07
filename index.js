@@ -98,6 +98,8 @@ export async function octoherd(
       );
 
       try {
+        const { id, owner, name } = repository
+        octokit.log.setContext({ repository: { id, owner, name } })
         await octoherdScript(octokit, repository, userOptions);
       } catch (error) {
         if (!error.cancel) throw error;
