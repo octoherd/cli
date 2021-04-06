@@ -1,4 +1,6 @@
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+
 import { VERSION as OctokitVersion } from "@octoherd/octokit";
 import chalk from "chalk";
 
@@ -16,7 +18,7 @@ import { cliOptions } from "./cli-options.js";
  * @param {function} script Octoherd Script function
  */
 export function run(script) {
-  const argv = yargs
+  const argv = yargs(hideBin(process.argv))
     .usage("Usage: $0 [options] [repos...]")
     .example(
       "$0 --token 0123456789012345678901234567890123456789 octokit/rest.js"
