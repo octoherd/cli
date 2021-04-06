@@ -22,7 +22,7 @@
     "mkdirp": "^1.0.4",
     "prompt-confirm": "^2.0.4",
     "tempy": "^1.0.0",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
     "semantic-release": "^17.1.1",
