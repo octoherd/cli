@@ -5,13 +5,13 @@
 ## Usage
 
 ```
-$ octoherd.js [script] [repos...]
+Usage: octoherd run [options] [script] [repos...]
 
 Positionals:
   script  Path to *.js script. Must be an ES Module.
   repos   One or multiple arrays in the form of 'repo-owner/repo-name'.
           'repo-owner/*' will find all repositories for one owner. '*' will find
-          all repositories the user has access to                  [default: []]
+          all repositories the user has access to          [array] [default: []]
 
 Options:
   --help                      Show help                                [boolean]
@@ -25,6 +25,9 @@ Options:
   --octoherd-debug            Show debug logs         [boolean] [default: false]
   --octoherd-bypass-confirms  Bypass prompts to confirm mutating requests
                                                       [boolean] [default: false]
+
+Examples:
+  octoherd run --octoherd-token $TOKEN path/to/script.js octoherd/cli
 ```
 
 The `script` must export a `script` function which takes three parameters:
