@@ -16,7 +16,7 @@
   "types": "inddex.d.ts",
   "dependencies": {
     "@octoherd/octokit": "^2.3.0",
-    "@octokit/openapi-types": "^5.2.2",
+    "@octokit/openapi-types": "^6.0.0",
     "chalk": "^4.1.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
