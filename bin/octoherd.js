@@ -11,25 +11,27 @@ import { VERSION } from "../version.js";
 import { cliOptions } from "./cli-options.js";
 
 const argv = yargs(hideBin(process.argv))
-  .usage("Usage: $0 [options] [script] [repos...]")
-  .example(
-    "$0 --token 0123456789012345678901234567890123456789 octokit/rest.js"
+  .command("run [script] [repos...]", "", (runCommand) =>
+    runCommand
+      .usage("Usage: $0 run [options] [script] [repos...]")
+      .example("$0 run --octoherd-token $TOKEN path/to/script.js octoherd/cli")
+      .positional("script", {
+        demandOption: true,
+        describe: "Path to *.js script. Must be an ES Module.",
+      })
+      .positional("repos", {
+        demandOption: true,
+        describe:
+          "One or multiple arrays in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to",
+        default: [],
+      })
+      .options(cliOptions)
   )
-  .command("$0 [script] [repos...]", "", (yargs) => {
-    yargs.positional("script", {
-      demandOption: true,
-      describe: "Path to *.js script. Must be an ES Module.",
-    });
-    yargs.positional("repos", {
-      demandOption: true,
-      describe:
-        "One or multiple arrays in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to",
-      default: [],
-    });
-  })
-  .options(cliOptions)
+  .demandCommand()
   .version(VERSION)
-  .epilog(`copyright 2020-${new Date().getFullYear()}`).argv;
+  .epilog(`Questions? Ideas? Feedback? ➡ https://github.com/octoherd/octoherd/discussions
+  
+Copyright 2020-${new Date().getFullYear()} Octoherd Contributors`).argv;
 
 const { _, $0, script, repos, ...options } = argv;
 
