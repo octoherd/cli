@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { resolve } from "path";
 import { VERSION as OctokitVersion } from "@octoherd/octokit";
 import chalk from "chalk";
@@ -9,7 +10,7 @@ import { octoherd } from "../index.js";
 import { VERSION } from "../version.js";
 import { cliOptions } from "./cli-options.js";
 
-const argv = yargs
+const argv = yargs(hideBin(process.argv))
   .usage("Usage: $0 [options] [script] [repos...]")
   .example(
     "$0 --token 0123456789012345678901234567890123456789 octokit/rest.js"
