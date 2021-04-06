@@ -58,5 +58,10 @@
         }
       ]
     ]
+  },
+  "renovate": {
+    "extends": [
+      "github>octoherd/.github"
+    ]
   }
 }
