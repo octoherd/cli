@@ -82,7 +82,7 @@ const runCommand = {
 
         return scriptModule.script;
       }),
-  handler: () => {
+  handler: (args) => {
     console.log(
       `\n${chalk.bold("Running @octoherd/cli v%s")} ${chalk.gray(
         "(@octoherd/octokit v%s, Node.js: %s, %s %s)"
