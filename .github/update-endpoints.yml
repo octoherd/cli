@@ -1,0 +1,30 @@
+name: Update Prettier
+on:
+  repository_dispatch:
+    types: [octokit/openapi]
+  workflow_dispatch: {}
+jobs:
+  update_prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          version: 12
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm ci
+      - run: npm install @octokit/openapi@latest
+      - run: node scripts/generate-endpoints.js
+      - uses: gr2m/create-or-update-pull-request-action@v1.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          title: "Enpoints updated"
+          body: "An update to `@octokit/openapi` resulted in an update to `lib/generated/endpoints.js`"
+          branch: ${{ github.ref }}
+          commit-message: "build: endpoints updated"
