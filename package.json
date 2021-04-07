@@ -18,13 +18,15 @@
     "@octoherd/octokit": "^2.3.0",
     "@octokit/openapi-types": "^6.0.0",
     "chalk": "^4.1.0",
+    "enquirer": "^2.3.6",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
-    "prompt-confirm": "^2.0.4",
     "tempy": "^1.0.0",
     "yargs": "^17.0.0-candidate.10"
   },
   "devDependencies": {
+    "@octokit/openapi": "^2.15.0",
+    "prettier": "^2.2.1",
     "semantic-release": "^17.1.1",
     "semantic-release-plugin-update-version-in-files": "^1.1.0",
     "simple-mock": "^0.8.0",
