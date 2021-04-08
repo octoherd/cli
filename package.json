@@ -16,8 +16,10 @@
   "types": "inddex.d.ts",
   "dependencies": {
     "@octoherd/octokit": "^2.3.0",
+    "@octokit/auth-oauth-device": "^3.1.1",
     "@octokit/openapi-types": "^6.0.0",
     "chalk": "^4.1.0",
+    "clipboardy": "^2.3.0",
     "enquirer": "^2.3.6",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
