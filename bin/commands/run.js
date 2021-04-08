@@ -12,21 +12,21 @@ Node.js:           ${process.version}, ${process.platform} ${process.arch}`.trim
 
 /** @type { {[key: string]: import("yargs").Options} } */
 const options = {
-  "octoherd-token": {
-    description:
-      'Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.',
-    type: "string",
-    alias: "T",
-  },
   "octoherd-script": {
     description: "Path to *.js script. Must be an ES Module.",
     demandOption: true,
     type: "string",
     alias: "S",
   },
+  "octoherd-token": {
+    description:
+      'Requires the "public_repo" scope for public repositories, "repo" scope for private repositories. Creates an OAuth token if not set.',
+    type: "string",
+    alias: "T",
+  },
   "octoherd-repos": {
     description:
-      "One or multiple repositories in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to",
+      "One or multiple repositories in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to. Will prompt for repositories if not set.",
     type: "string",
     array: true,
     alias: "R",
@@ -54,8 +54,23 @@ const runCommand = {
   describe: "",
   builder: (yargs) =>
     yargs
-      .usage("Usage: $0 run [options]")
-      .example("$0 run -T $TOKEN -S path/to/script.js -R octoherd/cli", "")
+      .wrap(96)
+      .usage("Usage: octoherd run -S path/to/script.js [options]")
+      .example([
+        ["octoherd run -S path/to/script.js", "Minimal usage example"],
+        [
+          "octoherd run -S path/to/script.js -T $TOKEN  -R octoherd/cli",
+          "Pass token and repos as CLI flags",
+        ],
+        [
+          "octoherd run -S path/to/script.js -T $TOKEN  -R octoherd/cli",
+          "Avoid prompts for token and repos",
+        ],
+        [
+          "octoherd run -S path/to/script.js -T $TOKEN  -R octoherd/cli --octoherd-bypass-confirms",
+          "Avoid any prompts",
+        ],
+      ])
       .options(options)
       .version(VERSIONS)
       .coerce("octoherd-script", async (script) => {
