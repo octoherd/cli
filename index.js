@@ -35,7 +35,7 @@ export async function octoherd(options) {
     octoherdCache = false,
     octoherdDebug,
     octoherdScript,
-    octoherdRepos = [],
+    octoherdRepos,
     octoherdBypassConfirms,
     ...userOptions
   } = options;
@@ -114,11 +114,8 @@ export async function octoherd(options) {
     octokit,
     script: octoherdScript,
     userOptions,
+    octoherdReposPassedAsFlag: !!octoherdRepos,
   };
-
-  if (octoherdRepos.length === 0) {
-    throw new Error("[octoherd] No repositories provided");
-  }
 
   await runScriptAgainstRepositories(state, octoherdRepos);
 

@@ -29,7 +29,6 @@ const options = {
       "One or multiple repositories in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to",
     type: "string",
     array: true,
-    demandOption: true,
     alias: "R",
   },
   "octoherd-cache": {
