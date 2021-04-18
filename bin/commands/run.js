@@ -15,7 +15,6 @@ const options = {
   "octoherd-token": {
     description:
       'Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.',
-    demandOption: true,
     type: "string",
     alias: "T",
   },

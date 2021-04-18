@@ -1,8 +1,11 @@
 import { appendFileSync } from "fs";
 
 import { Octokit } from "@octoherd/octokit";
+import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 import chalk from "chalk";
 import tempy from "tempy";
+import clipboardy from "clipboardy";
+import enquirer from "enquirer";
 
 import { cache as octokitCachePlugin } from "./lib/octokit-plugin-cache.js";
 import { requestLog } from "./lib/octokit-plugin-request-log.js";
@@ -48,8 +51,38 @@ export async function octoherd(
   if (typeof octoherdCache === "string") plugins.push(octokitCachePlugin);
   const CliOctokit = Octokit.plugin(...plugins);
 
+  const authOptions = octoherdToken
+    ? { auth: octoherdToken }
+    : {
+        authStrategy: createOAuthDeviceAuth,
+        auth: {
+          // Octoherd's OAuth App
+          clientId: "e93735961b3b72ca5c02",
+          clientType: "oauth-app",
+          scopes: ["repo"],
+          async onVerification({ verification_uri, user_code }) {
+            console.log("Open %s", verification_uri);
+
+            await clipboardy.write(user_code);
+            console.log("Paste code: %s (copied to your clipboard)", user_code);
+
+            console.log(
+              `\n${chalk.gray(
+                "To avoid this prompt, pass a token with --octoherd-token or -T"
+              )}\n`
+            );
+
+            const prompt = new enquirer.Input({
+              message: "Press <enter> when ready",
+            });
+
+            await prompt.run();
+          },
+        },
+      };
+
   const octokit = new CliOctokit({
-    auth: octoherdToken,
+    ...authOptions,
     userAgent: ["octoherd-cli", VERSION].join("/"),
     octoherd: {
       debug: octoherdDebug,
@@ -81,6 +114,10 @@ export async function octoherd(
     throw new Error("[octoherd] No repositories provided");
   }
 
+  // trigger OAuth Device Flow before loading repositories
+  // It's not necessary, but a better UX
+  await octokit.auth({ type: "oauth-user" });
+
   const state = {
     log: console,
     octokit,
@@ -98,8 +135,8 @@ export async function octoherd(
       );
 
       try {
-        const { id, owner, name } = repository
-        octokit.log.setContext({ repository: { id, owner, name } })
+        const { id, owner, name } = repository;
+        octokit.log.setContext({ repository: { id, owner, name } });
         await octoherdScript(octokit, repository, userOptions);
       } catch (error) {
         if (!error.cancel) throw error;
