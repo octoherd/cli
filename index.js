@@ -10,7 +10,7 @@ import enquirer from "enquirer";
 import { cache as octokitCachePlugin } from "./lib/octokit-plugin-cache.js";
 import { requestLog } from "./lib/octokit-plugin-request-log.js";
 import { requestConfirm } from "./lib/octokit-plugin-request-confirm.js";
-import { resolveRepositories } from "./lib/resolve-repositories.js";
+import { runScriptAgainstRepositories } from "./lib/run-script-against-repositories.js";
 import { VERSION } from "./version.js";
 
 const levelColor = {
@@ -29,15 +29,10 @@ const levelColor = {
  * @param {string} options.octoherdToken Personal Access Token: Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.
  * @param {boolean} options.octoherdCache Array of repository names in the form of "repo-owner/repo-name". To match all repositories for an owner, pass "repo-owner/*"
  */
-export async function octoherd(
-  options = {
-    octoherdCache: false,
-    octoherdRepos: [],
-  }
-) {
+export async function octoherd(options) {
   const {
     octoherdToken,
-    octoherdCache,
+    octoherdCache = false,
     octoherdDebug,
     octoherdScript,
     octoherdRepos,
@@ -110,10 +105,6 @@ export async function octoherd(
     },
   });
 
-  if (octoherdRepos.length === 0) {
-    throw new Error("[octoherd] No repositories provided");
-  }
-
   // trigger OAuth Device Flow before loading repositories
   // It's not necessary, but a better UX
   await octokit.auth({ type: "oauth-user" });
@@ -121,32 +112,12 @@ export async function octoherd(
   const state = {
     log: console,
     octokit,
+    script: octoherdScript,
+    userOptions,
+    octoherdReposPassedAsFlag: !!octoherdRepos,
   };
 
-  try {
-    octokit.log.info("Loading repositories ...");
-    const repositories = await resolveRepositories(state, octoherdRepos);
-
-    for (const repository of repositories) {
-      octokit.log.info(
-        { octoherd: true },
-        "Running on %s ...",
-        repository.full_name
-      );
-
-      try {
-        const { id, owner, name } = repository;
-        octokit.log.setContext({ repository: { id, owner, name } });
-        await octoherdScript(octokit, repository, userOptions);
-      } catch (error) {
-        if (!error.cancel) throw error;
-        octokit.log.debug(error.message);
-      }
-    }
-  } catch (error) {
-    octokit.log.error(error);
-    process.exitCode = 1;
-  }
+  await runScriptAgainstRepositories(state, octoherdRepos);
 
   console.log("");
   console.log(chalk.gray("-".repeat(80)));

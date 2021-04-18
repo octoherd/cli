@@ -5,29 +5,33 @@
 ## Usage
 
 ```
-Usage: octoherd run [options] [script] [repos...]
-
-Positionals:
-  script  Path to *.js script. Must be an ES Module.
-  repos   One or multiple arrays in the form of 'repo-owner/repo-name'.
-          'repo-owner/*' will find all repositories for one owner. '*' will find
-          all repositories the user has access to          [array] [default: []]
+Usage: octoherd run -S path/to/script.js [options]
 
 Options:
-  --help                      Show help                                [boolean]
-  --version                   Show version number                      [boolean]
-  --octoherd-token            Requires the "public_repo" scope for public
-                              repositories, "repo" scope for private
-                              repositories.                  [string] [required]
-  --octoherd-cache            Cache responses for debugging. Creates a ./cache
-                              folder if flag is set. Override by passing custom
-                              path                                      [string]
-  --octoherd-debug            Show debug logs         [boolean] [default: false]
-  --octoherd-bypass-confirms  Bypass prompts to confirm mutating requests
-                                                      [boolean] [default: false]
+      --help                      Show help                                            [boolean]
+  -S, --octoherd-script           Path to *.js script. Must be an ES Module. [string] [required]
+  -T, --octoherd-token            Requires the "public_repo" scope for public repositories, "rep
+                                  o" scope for private repositories. Creates an OAuth token if n
+                                  ot set.                                               [string]
+  -R, --octoherd-repos            One or multiple repositories in the form of 'repo-owner/repo-n
+                                  ame'. 'repo-owner/*' will find all repositories for one owner.
+                                   '*' will find all repositories the user has access to. Will p
+                                  rompt for repositories if not set.                     [array]
+      --octoherd-cache            Cache responses for debugging. Creates a ./cache folder if fla
+                                  g is set. Override by passing custom path             [string]
+      --octoherd-debug            Show debug logs                     [boolean] [default: false]
+      --octoherd-bypass-confirms  Bypass prompts to confirm mutating requests
+                                                                      [boolean] [default: false]
+      --version                   Show version number                                  [boolean]
 
 Examples:
-  octoherd run --octoherd-token $TOKEN path/to/script.js octoherd/cli
+  octoherd run -S path/to/script.js                 Minimal usage example
+  octoherd run -S path/to/script.js -T $TOKEN  -R   Pass token and repos as CLI flags
+  octoherd/cli
+  octoherd run -S path/to/script.js -T $TOKEN  -R   Avoid prompts for token and repos
+  octoherd/cli
+  octoherd run -S path/to/script.js -T $TOKEN  -R   Avoid any prompts
+  octoherd/cli --octoherd-bypass-confirms
 ```
 
 The `script` must export a `script` function which takes three parameters:
