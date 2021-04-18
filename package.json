@@ -44,7 +44,8 @@
   "repository": "github:octoherd/cli",
   "release": {
     "branches": [
-      "main"
+      "main",
+      "beta"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
