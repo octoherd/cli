@@ -13,6 +13,8 @@ import { requestConfirm } from "./lib/octokit-plugin-request-confirm.js";
 import { runScriptAgainstRepositories } from "./lib/run-script-against-repositories.js";
 import { VERSION } from "./version.js";
 
+export { Octokit } from "@octoherd/octokit";
+
 const levelColor = {
   debug: chalk.bgGray.black,
   info: chalk.bgGreen.black,
@@ -21,19 +23,12 @@ const levelColor = {
 };
 
 /**
- * Find all releases in a GitHub repository or organization after a specified date
- *
- * @param {object} options
- * @param {function} options.octoherdScript Path to script to run against a repository
- * @param {string[]} options.octoherdRepos Cache responses for debugging
- * @param {string} options.octoherdToken Personal Access Token: Requires the "public_repo" scope for public repositories, "repo" scope for private repositories.
- * @param {boolean} options.octoherdCache Array of repository names in the form of "repo-owner/repo-name". To match all repositories for an owner, pass "repo-owner/*"
+ * @param {import(".").OctoherdOptions} options
  */
 export async function octoherd(options) {
   const {
     octoherdToken,
     octoherdCache = false,
-    octoherdDebug,
     octoherdScript,
     octoherdRepos,
     octoherdBypassConfirms,
@@ -80,7 +75,6 @@ export async function octoherd(options) {
     ...authOptions,
     userAgent: ["octoherd-cli", VERSION].join("/"),
     octoherd: {
-      debug: octoherdDebug,
       cache: octoherdCache,
       bypassConfirms: octoherdBypassConfirms,
       onLogMessage(level, message, additionalData) {
