@@ -1,7 +1,8 @@
 name: Update Prettier
 on:
   repository_dispatch:
-    types: [octokit/openapi]
+    types:
+      - octokit/openapi release
   workflow_dispatch: {}
 jobs:
   update_prettier:
