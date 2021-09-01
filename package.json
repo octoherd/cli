@@ -27,7 +27,7 @@
     "yargs": "^17.0.0-candidate.10"
   },
   "devDependencies": {
-    "@octokit/openapi": "^4.0.0",
+    "@octokit/openapi": "^5.0.0",
     "prettier": "^2.2.1",
     "semantic-release": "^17.1.1",
     "semantic-release-plugin-update-version-in-files": "^1.1.0",
