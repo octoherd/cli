@@ -29,7 +29,7 @@
   "devDependencies": {
     "@octokit/openapi": "^5.0.0",
     "prettier": "^2.2.1",
-    "semantic-release": "^18.0.0",
+    "semantic-release": "^19.0.0",
     "semantic-release-plugin-update-version-in-files": "^1.1.0",
     "simple-mock": "^0.8.0",
     "uvu": "^0.5.1"
