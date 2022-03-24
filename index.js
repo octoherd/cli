@@ -108,7 +108,7 @@ export async function octoherd(options) {
     octokit,
     script: octoherdScript,
     userOptions,
-    octoherdReposPassedAsFlag: !!octoherdRepos.length,
+    octoherdReposPassedAsFlag: octoherdRepos.length,
   };
 
   await runScriptAgainstRepositories(state, octoherdRepos);
