@@ -4,9 +4,11 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import chalk from "chalk";
+import getStdin from 'get-stdin';
 
 import { octoherd } from "../index.js";
 import { VERSION } from "../version.js";
+import { parseInput } from "./parse-input.js";
 import runCommand from "./commands/run.js";
 
 const EPILOG = chalk.gray(`Questions? Ideas? Feedback?
@@ -19,6 +21,10 @@ const argv = await yargs(hideBin(process.argv))
   .demandCommand()
   .version(VERSION)
   .epilog(EPILOG).argv;
+
+const stdin = await getStdin();
+
+argv.octoherdRepos = [...argv.octoherdRepos || [], ...parseInput(stdin)];
 
 try {
   await octoherd(argv);
