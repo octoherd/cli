@@ -12,6 +12,7 @@ jobs:
         node:
           - 12
           - 14
+          - lts/*
     name: Node ${{ matrix.node }}
     steps:
       - uses: actions/checkout@v3
