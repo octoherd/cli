@@ -84,9 +84,16 @@ const runCommand = {
         try {
           scriptModule = await import(path);
         } catch (error) {
-          throw new Error(
-            `[octoherd] ${path} does not exist or is not an ES Module`
-          );
+          if (error.code === 'ERR_MODULE_NOT_FOUND') {
+            throw new Error(
+              `[octoherd] ${path} does not exist`
+            );
+          }
+
+          const err = new Error(
+            `[octoherd] ${error}\n    at ${path}`
+          )
+          throw err;
         }
 
         if (!scriptModule.script) {
