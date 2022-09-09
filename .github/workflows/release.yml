@@ -18,6 +18,7 @@ jobs:
           node-version: 16
           cache: npm
       - run: npm ci
+      - run: npm i remove-semantic-release-as-dependency
       - run: npx semantic-release --debug
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
