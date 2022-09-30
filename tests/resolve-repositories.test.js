@@ -31,6 +31,29 @@ withOrg("when single repository exists", async () => {
   equal(resolvedRepos, [mockedResponse]);
 });
 
+withOrg("when requesting the same repository twice", async () => {
+  const org = "octoherd";
+  const repo = "cli";
+  const octokit = new Octokit({
+    auth: "randomToken",
+  });
+
+  const mockedResponse = { id: 1, name: repo };
+  const repositories = [`${org}/${repo}`, `${org}/${repo}`];
+
+  simple.mock(octokit, "request").resolveWith({ data: mockedResponse });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [mockedResponse]);
+});
+
 withOrg("when requesting all the repositories", async () => {
   const org = "octoherd";
   const repo = "*";
@@ -214,6 +237,30 @@ withUser("when single repository exists", async () => {
   const repositories = [`${owner}/${repo}`];
 
   const mockedResponse = { name: repo };
+
+  simple.mock(octokit, "request").resolveWith({ data: mockedResponse });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [mockedResponse]);
+});
+
+withUser("when requesting the same repository twice", async () => {
+  const owner = "gr2m";
+  const repo = "squash-commit-app";
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_TOKEN,
+  });
+
+  const repositories = [`${owner}/${repo}`, `${owner}/${repo}`];
+
+  const mockedResponse = { id: 1, name: repo };
 
   simple.mock(octokit, "request").resolveWith({ data: mockedResponse });
 
