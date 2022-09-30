@@ -15,7 +15,7 @@ withOrg("when single repository exists", async () => {
     auth: "randomToken",
   });
 
-  const mockedResponse = { name: repo };
+  const mockedResponse = { id: 1, name: repo };
   const repositories = [`${org}/${repo}`];
 
   simple.mock(octokit, "request").resolveWith({ data: mockedResponse });
@@ -39,21 +39,21 @@ withOrg("when requesting all the repositories", async () => {
   const repositories = [`${org}/${repo}`];
 
   const mockedResponse = [
-    { name: "cli" },
-    { name: "octoherd" },
-    { name: ".github" },
-    { name: "octokit" },
-    { name: "script-close-renovate-dashboard-issues" },
-    { name: "script-create-repositories-from-script-folders" },
-    { name: "script-find-releases" },
-    { name: "script-remove-dependabot" },
-    { name: "script-remove-required-ci-check" },
-    { name: "script-setup-renovate" },
-    { name: "script-star-or-unstar" },
-    { name: "script-sync-branch-protections" },
-    { name: "script-add-octoherd-cli-to-script" },
-    { name: "script-hello-world" },
-    { name: "create-octoherd-script }" },
+    { id: 1, name: "cli" },
+    { id: 2, name: "octoherd" },
+    { id: 3, name: ".github" },
+    { id: 4, name: "octokit" },
+    { id: 5, name: "script-close-renovate-dashboard-issues" },
+    { id: 6, name: "script-create-repositories-from-script-folders" },
+    { id: 7, name: "script-find-releases" },
+    { id: 8, name: "script-remove-dependabot" },
+    { id: 9, name: "script-remove-required-ci-check" },
+    { id: 10, name: "script-setup-renovate" },
+    { id: 11, name: "script-star-or-unstar" },
+    { id: 12, name: "script-sync-branch-protections" },
+    { id: 13, name: "script-add-octoherd-cli-to-script" },
+    { id: 14, name: "script-hello-world" },
+    { id: 15, name: "create-octoherd-script }" },
   ];
 
   simple.mock(octokit, "request").resolveWith(undefined);
@@ -87,24 +87,24 @@ withOrg(
     const repositories = [`${org}/${repo}`];
 
     const scriptRepos = [
-      { name: "script-close-renovate-dashboard-issues" },
-      { name: "script-create-repositories-from-script-folders" },
-      { name: "script-find-releases" },
-      { name: "script-remove-dependabot" },
-      { name: "script-remove-required-ci-check" },
-      { name: "script-setup-renovate" },
-      { name: "script-star-or-unstar" },
-      { name: "script-sync-branch-protections" },
-      { name: "script-add-octoherd-cli-to-script" },
-      { name: "script-hello-world" },
+      { id: 1, name: "script-close-renovate-dashboard-issues" },
+      { id: 2, name: "script-create-repositories-from-script-folders" },
+      { id: 3, name: "script-find-releases" },
+      { id: 4, name: "script-remove-dependabot" },
+      { id: 5, name: "script-remove-required-ci-check" },
+      { id: 6, name: "script-setup-renovate" },
+      { id: 7, name: "script-star-or-unstar" },
+      { id: 8, name: "script-sync-branch-protections" },
+      { id: 9, name: "script-add-octoherd-cli-to-script" },
+      { id: 10, name: "script-hello-world" },
     ];
 
     const nonScriptRepos = [
-      { name: "cli" },
-      { name: "octoherd" },
-      { name: ".github" },
-      { name: "octokit" },
-      { name: "create-octoherd-script }" },
+      { id: 11, name: "cli" },
+      { id: 12, name: "octoherd" },
+      { id: 13, name: ".github" },
+      { id: 14, name: "octokit" },
+      { id: 15, name: "create-octoherd-script }" },
     ];
 
     simple.mock(octokit, "request").resolveWith(undefined);
@@ -139,12 +139,12 @@ withOrg(
     const repositories = [`${org}/${repo}`];
 
     const testRepos = [
-      { name: "one-test" },
-      { name: "two-test" },
-      { name: "three-test" },
+      { id: 1, name: "one-test" },
+      { id: 2, name: "two-test" },
+      { id: 3, name: "three-test" },
     ];
 
-    const nonTestRepos = [{ name: "foo" }, { name: "bar" }];
+    const nonTestRepos = [{ id: 4, name: "foo" }, { id: 5, name: "bar" }];
 
     simple.mock(octokit, "request").resolveWith(undefined);
 
@@ -177,12 +177,12 @@ withOrg(
     const repositories = [`${org}/${repo}`];
 
     const testRepos = [
-      { name: "middle-one-test" },
-      { name: "middle-two-test" },
-      { name: "middle-three-test" },
+      { id: 1, name: "middle-one-test" },
+      { id: 2, name: "middle-two-test" },
+      { id: 3, name: "middle-three-test" },
     ];
 
-    const nonTestRepos = [{ name: "foo" }, { name: "bar" }];
+    const nonTestRepos = [{ id: 4, name: "foo" }, { id: 5, name: "bar" }];
 
     simple.mock(octokit, "request").resolveWith(undefined);
 
@@ -237,7 +237,7 @@ withUser("when requesting all the repositories", async () => {
 
   const repositories = [`${owner}/${repo}`];
 
-  const mockedResponse = [{ name: "repo1" }, { name: "repo2" }];
+  const mockedResponse = [{ id: 1, name: "repo1" }, { id: 2, name: "repo2" }];
 
   simple.mock(octokit, "request").rejectWith(undefined);
 
