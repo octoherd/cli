@@ -32,7 +32,10 @@ Examples:
   octoherd/cli
   octoherd run -S path/to/script.js -T $TOKEN  -R   Avoid any prompts
   octoherd/cli --octoherd-bypass-confirms
+  cat list.txt | octoherd run -S path/to/script.js -T $TOKEN
 ```
+
+When piping a list of repositories, lines starting with a comment delimiter such as `#` or `//` will be ignored.
 
 The `script` must export a `script` function which takes three parameters:
 

@@ -21,6 +21,7 @@
     "chalk": "^5.0.0",
     "clipboardy": "^3.0.0",
     "enquirer": "^2.3.6",
+    "get-stdin": "^9.0.0",
     "jsonfile": "^6.0.1",
     "mkdirp": "^1.0.4",
     "tempy": "^2.0.0",
