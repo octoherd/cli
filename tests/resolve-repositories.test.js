@@ -387,6 +387,39 @@ withUser("when requesting all the repositories", async () => {
   equal(resolvedRepos, mockedResponse);
 });
 
+withUser("when requesting all repositories where one repository is ignored", async () => {
+  const octokit = new Octokit({ auth: "randomToken" });
+
+  const repositories = ['*', '!gr2m/two'];
+
+  const mockedResponse = [
+    { id: 1, name: "one", full_name: 'gr2m/one' },
+    { id: 2, name: "two", full_name: 'gr2m/two' },
+    { id: 3, name: "three", full_name: 'gr2m/three' },
+  ];
+
+  simple.mock(octokit, "request").resolveWith({ data: undefined });
+
+  simple.mock(octokit.paginate, "iterator").returnWith({
+    async *[Symbol.asyncIterator]() {
+      yield { data: mockedResponse };
+    },
+  });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [
+    { id: 1, name: "one", full_name: 'gr2m/one' },
+    { id: 3, name: "three", full_name: 'gr2m/three' },
+  ]);
+});
+
 resolveRepos("resolve-repositories", () => {
   withOrg.run();
   withUser.run();
