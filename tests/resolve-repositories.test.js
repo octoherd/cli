@@ -54,6 +54,88 @@ withOrg("when requesting the same repository twice", async () => {
   equal(resolvedRepos, [mockedResponse]);
 });
 
+withOrg("when requesting all repositories where one repository is ignored", async () => {
+  const octokit = new Octokit({ auth: "randomToken" });
+
+  const repositories = ['octoherd/*', '!octoherd/cli'];
+
+  const mockedResponse = [
+    { id: 1, name: "cli", full_name: 'octoherd/cli' },
+    { id: 2, name: "octokit", full_name: 'octoherd/octokit' },
+    { id: 3, name: "octoherd", full_name: 'octoherd/octoherd' },
+  ];
+
+  simple.mock(octokit, "request").resolveWith({ data: undefined });
+
+  simple.mock(octokit.paginate, "iterator").returnWith({
+    async *[Symbol.asyncIterator]() {
+      yield { data: mockedResponse };
+    },
+  });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [
+    { id: 2, name: "octokit", full_name: 'octoherd/octokit' },
+    { id: 3, name: "octoherd", full_name: 'octoherd/octoherd' },
+  ]);
+});
+
+withOrg("when one of the requested repositories is ignored", async () => {
+  const octokit = new Octokit({ auth: "randomToken" });
+
+  const repositories = ['!octoherd/cli', 'octoherd/octokit'];
+
+  const mockedResponse = [
+    { id: 1, name: "cli", full_name: 'octoherd/cli' },
+    { id: 2, name: "octokit", full_name: 'octoherd/octokit' },
+  ];
+
+  simple.mock(octokit, "request").resolveWith({ data: mockedResponse[0] });
+  simple.mock(octokit, "request").resolveWith({ data: mockedResponse[1] });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [
+    { id: 2, name: "octokit", full_name: 'octoherd/octokit' },
+  ]);
+});
+
+withOrg("when requested repository is ignored", async () => {
+  const org = "octoherd";
+  const repo = "cli";
+  const octokit = new Octokit({
+    auth: "randomToken",
+  });
+
+  const mockedResponse = { id: 1, name: repo };
+  const repositories = [`!${org}/${repo.toUpperCase()}`];
+
+  simple.mock(octokit, "request").resolveWith({ data: mockedResponse });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, []);
+});
+
 withOrg("when requesting all the repositories", async () => {
   const org = "octoherd";
   const repo = "*";
@@ -303,6 +385,39 @@ withUser("when requesting all the repositories", async () => {
   );
 
   equal(resolvedRepos, mockedResponse);
+});
+
+withUser("when requesting all repositories where one repository is ignored", async () => {
+  const octokit = new Octokit({ auth: "randomToken" });
+
+  const repositories = ['*', '!gr2m/two'];
+
+  const mockedResponse = [
+    { id: 1, name: "one", full_name: 'gr2m/one' },
+    { id: 2, name: "two", full_name: 'gr2m/two' },
+    { id: 3, name: "three", full_name: 'gr2m/three' },
+  ];
+
+  simple.mock(octokit, "request").resolveWith({ data: undefined });
+
+  simple.mock(octokit.paginate, "iterator").returnWith({
+    async *[Symbol.asyncIterator]() {
+      yield { data: mockedResponse };
+    },
+  });
+
+  const resolvedRepos = await resolveRepositories(
+    {
+      log: console,
+      octokit,
+    },
+    repositories
+  );
+
+  equal(resolvedRepos, [
+    { id: 1, name: "one", full_name: 'gr2m/one' },
+    { id: 3, name: "three", full_name: 'gr2m/three' },
+  ]);
 });
 
 resolveRepos("resolve-repositories", () => {

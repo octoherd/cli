@@ -26,7 +26,7 @@ const options = {
   },
   "octoherd-repos": {
     description:
-      "One or multiple repositories in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to. Will prompt for repositories if not set.",
+      "One or multiple repositories in the form of 'repo-owner/repo-name'. 'repo-owner/*' will find all repositories for one owner. '*' will find all repositories the user has access to. To exclude a repository use '!repo-owner/repo'. Will prompt for repositories if not set.",
     type: "string",
     array: true,
     alias: "R",

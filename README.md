@@ -15,8 +15,9 @@ Options:
                                   ot set.                                               [string]
   -R, --octoherd-repos            One or multiple repositories in the form of 'repo-owner/repo-n
                                   ame'. 'repo-owner/*' will find all repositories for one owner.
-                                   '*' will find all repositories the user has access to. Will p
-                                  rompt for repositories if not set.                     [array]
+                                   '*' will find all repositories the user has access to.
+                                  To exclude a repository use '!repo-owner/repo'. Will prompt
+                                  for repositories if not set.                           [array]
       --octoherd-cache            Cache responses for debugging. Creates a ./cache folder if fla
                                   g is set. Override by passing custom path             [string]
       --octoherd-debug            Show debug logs                     [boolean] [default: false]
@@ -32,6 +33,8 @@ Examples:
   octoherd/cli
   octoherd run -S path/to/script.js -T $TOKEN  -R   Avoid any prompts
   octoherd/cli --octoherd-bypass-confirms
+  octoherd run -S path/to/script.js -T $TOKEN  -R   Will fetch all repositories except repo-owner/hello-world
+  'repo-owner/*' -R '!repo-owner/hello-world
 ```
 
 The `script` must export a `script` function which takes three parameters:
