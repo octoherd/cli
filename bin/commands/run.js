@@ -46,6 +46,10 @@ const options = {
     type: "boolean",
     default: false,
   },
+  "octoherd-base-url": {
+    description: "When using with GitHub Enterprise Server, set to the root URL of the API. For example, if your GitHub Enterprise Server's hostname is github.acme-inc.com, then set to https://github.acme-inc.com/api/v3.",
+    type: "string",
+  }
 };
 
 /** @type import('yargs').CommandModule */
@@ -69,6 +73,10 @@ const runCommand = {
         [
           "octoherd run -S path/to/script.js -T $TOKEN  -R octoherd/cli --octoherd-bypass-confirms",
           "Avoid any prompts",
+        ],
+        [
+          "octoherd run -S path/to/script.js --octoherd-base-url https://github.acme-inc.com/api/v3",
+          "Run octoherd script against GHES",
         ],
       ])
       .options(options)

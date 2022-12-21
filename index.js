@@ -32,6 +32,7 @@ export async function octoherd(options) {
     octoherdScript,
     octoherdRepos,
     octoherdBypassConfirms,
+    octoherdBaseUrl,
     ...userOptions
   } = options;
 
@@ -74,6 +75,7 @@ export async function octoherd(options) {
   const octokit = new CliOctokit({
     ...authOptions,
     userAgent: ["octoherd-cli", VERSION].join("/"),
+    baseUrl: octoherdBaseUrl,
     octoherd: {
       cache: octoherdCache,
       bypassConfirms: octoherdBypassConfirms,
