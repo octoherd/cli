@@ -23,6 +23,10 @@ Options:
       --octoherd-debug            Show debug logs                     [boolean] [default: false]
       --octoherd-bypass-confirms  Bypass prompts to confirm mutating requests
                                                                       [boolean] [default: false]
+      --octoherd-base-url         When using with GitHub Enterprise Server, set to the root URL 
+                                  of the API. For example, if your GitHub Enterprise Server's h
+                                  ostname is github.acme-inc.com, then set to https://github.ac
+                                  me-inc.com/api/v3.                                    [string]
       --version                   Show version number                                  [boolean]
 
 Examples:
@@ -35,6 +39,9 @@ Examples:
   octoherd/cli --octoherd-bypass-confirms
   octoherd run -S path/to/script.js -T $TOKEN  -R   Will fetch all repositories except repo-owner/hello-world
   'repo-owner/*' -R '!repo-owner/hello-world
+  octoherd run -S path/to/script.js                 Run octoherd script against GHES
+  --octoherd-base-url 
+  https://github.acme-inc.com/api/v3
 ```
 
 The `script` must export a `script` function which takes three parameters:
