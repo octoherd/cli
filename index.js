@@ -3,7 +3,7 @@ import { appendFileSync } from "fs";
 import { Octokit } from "@octoherd/octokit";
 import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 import chalk from "chalk";
-import tempy from "tempy";
+import { temporaryFile } from "tempy";
 import clipboardy from "clipboardy";
 import enquirer from "enquirer";
 
@@ -36,7 +36,7 @@ export async function octoherd(options) {
     ...userOptions
   } = options;
 
-  const tmpLogFile = tempy.file({ extension: "ndjson.log" });
+  const tmpLogFile = temporaryFile({ extension: "ndjson.log" });
 
   const plugins = [requestLog, requestConfirm];
   if (typeof octoherdCache === "string") plugins.push(octokitCachePlugin);
