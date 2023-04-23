@@ -17,7 +17,7 @@
   "dependencies": {
     "@octoherd/octokit": "^3.0.0",
     "@octokit/auth-oauth-device": "^4.0.0",
-    "@octokit/openapi-types": "^16.0.0",
+    "@octokit/openapi-types": "^17.0.0",
     "chalk": "^5.0.0",
     "clipboardy": "^3.0.0",
     "enquirer": "^2.3.6",
