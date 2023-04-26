@@ -52,7 +52,7 @@ export async function script(octokit, repository, options) {
 }
 ```
 
-- `octokit` is an instance of [`@octoherd/octokit`](https://github.com/octoherd/octokit.js)
+- `octokit` is an instance of [`octokit.js`'s Octokit](https://github.com/octokit/octokit.js)
 - `repository` is the response data of [`GET /repos/{owner}/{repo}`](https://developer.github.com/v3/repos/#get-a-repository)
 - `options` are all options passed to the CLI which are not used by `octoherd`.
 
