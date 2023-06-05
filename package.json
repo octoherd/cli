@@ -22,7 +22,7 @@
     "clipboardy": "^3.0.0",
     "enquirer": "^2.3.6",
     "jsonfile": "^6.0.1",
-    "mkdirp": "^2.0.0",
+    "mkdirp": "^3.0.0",
     "tempy": "^3.0.0",
     "yargs": "^17.0.0-candidate.10"
   },
