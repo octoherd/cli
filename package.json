@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@octokit/openapi": "^12.0.0",
-    "prettier": "^2.2.1",
+    "prettier": "^3.0.0",
     "simple-mock": "^0.8.0",
     "uvu": "^0.5.1"
   },
