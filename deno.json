@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "dev": "deno run -A cli.js -T $GITHUB_TOKEN -R 'kurtaking/octoherd-cli'"
+  }
+}

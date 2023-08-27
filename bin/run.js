@@ -14,14 +14,14 @@ import runCommand from "./commands/run.js";
  * @param {function} script Octoherd Script function
  */
 export async function run(script) {
-  const argv = await yargs(["run", ...hideBin(process.argv)])
+  const argv = await yargs(["run", ...hideBin(Deno.args)])
     .command(runCommand)
     .default("octoherd-script", () => script).argv;
 
   try {
-    await octoherd(argv);
+    octoherd(argv);
   } catch (error) {
     console.error(error);
-    process.exit(1);
+    Deno.exit(1);
   }
 }

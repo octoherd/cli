@@ -186,7 +186,7 @@ withOrg(
     const org = "octoherd";
     const repo = "script-*";
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN,
+      auth: Deno.env.GITHUB_TOKEN,
     });
 
     const repositories = [`${org}/${repo}`];
@@ -238,7 +238,7 @@ withOrg(
     const org = "octoherd";
     const repo = "*-test";
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN,
+      auth: Deno.env.GITHUB_TOKEN,
     });
 
     const repositories = [`${org}/${repo}`];
@@ -249,7 +249,10 @@ withOrg(
       { id: 3, name: "three-test" },
     ];
 
-    const nonTestRepos = [{ id: 4, name: "foo" }, { id: 5, name: "bar" }];
+    const nonTestRepos = [
+      { id: 4, name: "foo" },
+      { id: 5, name: "bar" },
+    ];
 
     simple.mock(octokit, "request").resolveWith(undefined);
 
@@ -276,7 +279,7 @@ withOrg(
     const org = "octoherd";
     const repo = "middle-*-test";
     const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN,
+      auth: Deno.env.GITHUB_TOKEN,
     });
 
     const repositories = [`${org}/${repo}`];
@@ -287,7 +290,10 @@ withOrg(
       { id: 3, name: "middle-three-test" },
     ];
 
-    const nonTestRepos = [{ id: 4, name: "foo" }, { id: 5, name: "bar" }];
+    const nonTestRepos = [
+      { id: 4, name: "foo" },
+      { id: 5, name: "bar" },
+    ];
 
     simple.mock(octokit, "request").resolveWith(undefined);
 
@@ -313,7 +319,7 @@ withUser("when single repository exists", async () => {
   const owner = "gr2m";
   const repo = "squash-commit-app";
   const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
+    auth: Deno.env.GITHUB_TOKEN,
   });
 
   const repositories = [`${owner}/${repo}`];
@@ -337,7 +343,7 @@ withUser("when requesting the same repository twice", async () => {
   const owner = "gr2m";
   const repo = "squash-commit-app";
   const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
+    auth: Deno.env.GITHUB_TOKEN,
   });
 
   const repositories = [`${owner}/${repo}`, `${owner}/${repo}`];
@@ -361,12 +367,15 @@ withUser("when requesting all the repositories", async () => {
   const owner = "octokitbot";
   const repo = "*";
   const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
+    auth: Deno.env.GITHUB_TOKEN,
   });
 
   const repositories = [`${owner}/${repo}`];
 
-  const mockedResponse = [{ id: 1, name: "repo1" }, { id: 2, name: "repo2" }];
+  const mockedResponse = [
+    { id: 1, name: "repo1" },
+    { id: 2, name: "repo2" },
+  ];
 
   simple.mock(octokit, "request").rejectWith(undefined);
 

@@ -1,4 +1,3 @@
-import { octoherd } from "./index.js";
 import { components } from "@octokit/openapi-types";
 
 export { Octokit } from "@octoherd/octokit";
