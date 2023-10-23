@@ -19,7 +19,7 @@
     "@octokit/auth-oauth-device": "^6.0.0",
     "@octokit/openapi-types": "^19.0.0",
     "chalk": "^5.0.0",
-    "clipboardy": "^3.0.0",
+    "clipboardy": "^4.0.0",
     "enquirer": "^2.3.6",
     "jsonfile": "^6.0.1",
     "mkdirp": "^3.0.0",
