@@ -1,4 +1,4 @@
-import { appendFileSync } from "fs";
+import { appendFileSync } from "node:fs";
 
 import { Octokit } from "@octoherd/octokit";
 import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";

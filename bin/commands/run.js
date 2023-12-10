@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from "node:path";
 
 import chalk from "chalk";
 import { VERSION as OctokitVersion } from "@octoherd/octokit";
@@ -8,7 +8,7 @@ import { VERSION } from "../../version.js";
 const VERSIONS = `
 @octoherd/cli:     v${VERSION}
 @octoherd/octokit: v${OctokitVersion}
-Node.js:           ${process.version}, ${process.platform} ${process.arch}`.trim();
+Deno:              ${Deno.version.deno}`.trim();
 
 /** @type { {[key: string]: import("yargs").Options} } */
 const options = {
@@ -47,9 +47,10 @@ const options = {
     default: false,
   },
   "octoherd-base-url": {
-    description: "When using with GitHub Enterprise Server, set to the root URL of the API. For example, if your GitHub Enterprise Server's hostname is github.acme-inc.com, then set to https://github.acme-inc.com/api/v3.",
+    description:
+      "When using with GitHub Enterprise Server, set to the root URL of the API. For example, if your GitHub Enterprise Server's hostname is github.acme-inc.com, then set to https://github.acme-inc.com/api/v3.",
     type: "string",
-  }
+  },
 };
 
 /** @type import('yargs').CommandModule */
@@ -87,20 +88,16 @@ const runCommand = {
         if (typeof script === "function") return script;
 
         let scriptModule;
-        const path = resolve(process.cwd(), script);
+        const path = resolve(Deno.cwd(), script);
 
         try {
           scriptModule = await import(path);
         } catch (error) {
-          if (error.code === 'ERR_MODULE_NOT_FOUND') {
-            throw new Error(
-              `[octoherd] ${path} does not exist`
-            );
+          if (error.code === "ERR_MODULE_NOT_FOUND") {
+            throw new Error(`[octoherd] ${path} does not exist`);
           }
 
-          const err = new Error(
-            `[octoherd] ${error}\n    at ${path}`
-          )
+          const err = new Error(`[octoherd] ${error}\n    at ${path}`);
           throw err;
         }
 
@@ -113,13 +110,11 @@ const runCommand = {
   handler: () => {
     console.log(
       `\n${chalk.bold("Running @octoherd/cli v%s")} ${chalk.gray(
-        "(@octoherd/octokit v%s, Node.js: %s, %s %s)"
+        "(@octoherd/octokit v%s, Deno: %s)"
       )}\n`,
       VERSION,
       OctokitVersion,
-      process.version,
-      process.platform,
-      process.arch
+      Deno.version.deno
     );
   },
 };
