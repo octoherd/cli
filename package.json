@@ -45,13 +45,6 @@
   "license": "ISC",
   "repository": "github:octoherd/cli",
   "release": {
-    "branches": [
-      "main",
-      {
-        "name": "beta",
-        "prerelease": true
-      }
-    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
