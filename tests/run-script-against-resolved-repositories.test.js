@@ -2,7 +2,7 @@ import { suite } from "uvu";
 import { equal } from "uvu/assert";
 import simple from "simple-mock";
 
-import { runScriptAgainstRepositories } from "../lib/run-script-against-resolved-repositories.js";
+import { runScriptAgainstRepositories } from "../lib/run-script-against-repositories.js";
 
 const runAgainstRepos = suite('run script against repositories');
 
