@@ -14,6 +14,7 @@ import { loadRepositoriesAndRunScript } from "./lib/load-repositories-and-run-sc
 import { VERSION } from "./version.js";
 
 export { Octokit } from "@octoherd/octokit";
+export { runScriptAgainstRepositories } from "./lib/run-script-against-repositories.js";
 
 const levelColor = {
   debug: chalk.bgGray.black,
