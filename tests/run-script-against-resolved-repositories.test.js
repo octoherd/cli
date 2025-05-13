@@ -14,10 +14,20 @@ runAgainstRepos('run the script against the provided repositories', async () => 
   const octokit = {log: {info: octokitInfoLogger}};
   const octokitCoreRepository = {id: 456, owner: {login: 'octokit'}, name: 'core.js', full_name: 'octokit/core.js'};
   const repositories = [octoherdCliRepository, octokitCoreRepository];
-  const script = simple.spy(() => undefined);
+  const script = simple.stub().callFn((octokitInstance, repository, options) => {
+    switch (repository) {
+      case octoherdCliRepository:
+        return {foo: 'bar'};
+      case octokitCoreRepository:
+        return {baz: 'qux'};
+      default:
+        throw new Error('Unknown repository');
+    }
+  });
 
-  await runScriptAgainstRepositories(octokit, repositories, script, userOptions);
+  const results = await runScriptAgainstRepositories(octokit, repositories, script, userOptions);
 
+  equal(results, {[octoherdCliRepository.full_name]: {foo: 'bar'}, [octokitCoreRepository.full_name]: {baz: 'qux'}});
   repositories.forEach((repository, index) => {
     equal(script.calls[index].args, [octokit, repository, userOptions]);
     equal(octokitInfoLogger.calls[index].args, [{octoherd: true}, "Running on %s ...", repository.full_name]);
