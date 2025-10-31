@@ -17,7 +17,7 @@
   "dependencies": {
     "@octoherd/octokit": "^5.0.0",
     "@octokit/auth-oauth-device": "^8.0.0",
-    "@octokit/openapi-types": "^26.0.0",
+    "@octokit/openapi-types": "^27.0.0",
     "chalk": "^5.0.0",
     "clipboardy": "^5.0.0",
     "enquirer": "^2.3.6",
@@ -27,7 +27,7 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@octokit/openapi": "^20.0.0",
+    "@octokit/openapi": "^21.0.0",
     "prettier": "^3.0.0",
     "simple-mock": "^0.8.0",
     "uvu": "^0.5.1"
