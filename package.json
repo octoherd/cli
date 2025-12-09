@@ -27,7 +27,7 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@octokit/openapi": "^21.0.0",
+    "@octokit/openapi": "^22.0.0",
     "prettier": "^3.0.0",
     "simple-mock": "^0.8.0",
     "uvu": "^0.5.1"
