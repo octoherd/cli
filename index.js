@@ -10,10 +10,11 @@ import enquirer from "enquirer";
 import { cache as octokitCachePlugin } from "./lib/octokit-plugin-cache.js";
 import { requestLog } from "./lib/octokit-plugin-request-log.js";
 import { requestConfirm } from "./lib/octokit-plugin-request-confirm.js";
-import { runScriptAgainstRepositories } from "./lib/run-script-against-repositories.js";
+import { loadRepositoriesAndRunScript } from "./lib/load-repositories-and-run-script.js";
 import { VERSION } from "./version.js";
 
 export { Octokit } from "@octoherd/octokit";
+export { runScriptAgainstRepositories } from "./lib/run-script-against-repositories.js";
 
 const levelColor = {
   debug: chalk.bgGray.black,
@@ -113,7 +114,7 @@ export async function octoherd(options) {
     octoherdReposPassedAsFlag: !!octoherdRepos,
   };
 
-  await runScriptAgainstRepositories(state, octoherdRepos);
+  await loadRepositoriesAndRunScript(state, octoherdRepos);
 
   console.log("");
   console.log(chalk.gray("-".repeat(80)));
